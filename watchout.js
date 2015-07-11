@@ -29,17 +29,35 @@ var randomDuration = function(){
   return Math.floor(Math.random() * 3000);
 }
 
+var drag = d3.behavior.drag()
+    .on("drag", dragmove);
 
-var test = svgArea.append("circle")
-  .attr("cx", 25).attr("cy", 25).attr("r", 25)
-  .style("fill", "red")
-  .on("mouseenter", mouseEnter);
+var player = svgArea.append("circle")
+  .attr("cx", 15)
+  .attr("cy", 15)
+  .attr("r", 10)
+  .style("fill", "blue")
+  .call(drag);
 
-
-function mouseEnter(){
-  test.transition().style("fill","green");
+function dragmove(d) {
+  var x = d3.event.x;
+  var y = d3.event.y;
+  d3.select(this)
+  .attr('cx', x)
+  .attr('cy', y);//.attr("transform", "translate(" + x + "," + y + ")");
 }
+// works with mouse event
+// var test = svgArea.append("circle")
+//   .attr("cx", 25).attr("cy", 25).attr("r", 25)
+//   .style("fill", "red")
+//   .on("mouseenter", mouseEnter);
 
+
+// function mouseEnter(){
+//   test.transition().style("fill","green");
+// }
+
+//Loops the enemies movements to random locations with a random delay
 function looper(){
 var enemies = svgArea.selectAll("circle")
   .data(enemyRadii)
