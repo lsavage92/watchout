@@ -6,24 +6,19 @@ var svgArea = d3.select("body").append("svg")
 
 var enemyRadii = [];
 //create array with all attributes of enemy
-for(var i = 0; i < 10; i++){
-  var x = Math.floor(Math.random() * 800) + 20;
-  var y = Math.floor(Math.random() * 500) + 20;
-  var r = 20;
+for(var i = 0; i < 25; i++){
+  var x = Math.floor(Math.random() * 800) + 10;
+  var y = Math.floor(Math.random() * 500) + 10;
+  var r = 10;
   enemyRadii.push([r, x, y]);
 }
 
-var enemies = svgArea.selectAll("circle")
-  .data(enemyRadii)
-  .enter()
-  .append("circle");
-
 var randomX = function(){
-  return Math.floor(Math.random() * 800) + 20;
+  return Math.floor(Math.random() * 800) + 10;
 }
 
 var randomY = function(){
-  return Math.floor(Math.random() * 500) + 20;
+  return Math.floor(Math.random() * 500) + 10;
 }
 
 var randomDelay = function(){
@@ -33,21 +28,6 @@ var randomDelay = function(){
 var randomDuration = function(){
   return Math.floor(Math.random() * 3000);
 }
-
-var enemyAttributes = enemies
-  .attr("r", function(d){ return d[0]; }) //returns radii in array
-  .attr("cx", function(d){ return d[1]; })
-  .attr("cy", function(d){ return d[2]; })
-  .style("fill", "red")
-  .transition()
-  .delay(randomDelay)
-  .duration(randomDuration)
-  .ease("elastic")
-  .attr("cx", randomX)
-  .attr("cy", randomY);
-  // .duration(2000)
-  // .transition().attr("transform", translate(100));
-
 
 
 var test = svgArea.append("circle")
@@ -60,8 +40,30 @@ function mouseEnter(){
   test.transition().style("fill","green");
 }
 
+function looper(){
+var enemies = svgArea.selectAll("circle")
+  .data(enemyRadii)
+  .enter()
+  .append("circle")
+  .attr("r", function(d){ return d[0]; }) //returns radii in array
+  .attr("cx", function(d){ return d[1]; })
+  .attr("cy", function(d){ return d[2]; })
+  .style("fill", "red");
+  repeat();
 
+  function repeat(){
+    enemies
+      .transition()
+      .delay(randomDelay)
+      .duration(2000)
+      //.ease("elastic")
+      .attr("cx", randomX)
+      .attr("cy", randomY)
+      .each("end",repeat);
+  }
+}
 
+looper();
 
 //transition for enemies for weaving motion
 //duration()
